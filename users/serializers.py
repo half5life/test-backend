@@ -31,3 +31,12 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         user.set_password(password)
         user.save()
         return user
+
+
+class UserProfileSerializer(serializers.ModelSerializer):
+    role = serializers.StringRelatedField(read_only=True)
+
+    class Meta:
+        model = User
+        fields = ('id', 'email', 'first_name', 'last_name', 'middle_name', 'role')
+        read_only_fields = ('email',)
