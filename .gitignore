@@ -227,3 +227,8 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Project documentation
+ARCHITECTURE.md
+test_task.txt
+TODO.md
