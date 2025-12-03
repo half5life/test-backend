@@ -27,10 +27,24 @@ class Command(BaseCommand):
             defaults={'description': 'Системные настройки'}
         )
 
+        # Ресурсы для управления RBAC (для админов)
+        res_roles, _ = Resource.objects.get_or_create(
+            name='roles',
+            defaults={'description': 'Управление ролями'}
+        )
+        res_resources, _ = Resource.objects.get_or_create(
+            name='resources',
+            defaults={'description': 'Управление ресурсами'}
+        )
+        res_permissions, _ = Resource.objects.get_or_create(
+            name='permissions',
+            defaults={'description': 'Управление правами доступа'}
+        )
+
         self.stdout.write('Настройка прав доступа...')
         
         # 1. Админ имеет полный доступ ко всем ресурсам
-        resources = [res_reports, res_users, res_settings]
+        resources = [res_reports, res_users, res_settings, res_roles, res_resources, res_permissions]
         for res in resources:
             RolePermission.objects.update_or_create(
                 role=admin_role,

@@ -1,9 +1,11 @@
 from django.shortcuts import render
-from rest_framework import generics
+from rest_framework import generics, viewsets
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework_simplejwt.token_blacklist.models import OutstandingToken, BlacklistedToken
-from .serializers import UserRegistrationSerializer, UserProfileSerializer
+from .serializers import UserRegistrationSerializer, UserProfileSerializer, RoleSerializer
 from django.contrib.auth import get_user_model
+from .models import Role
+from rbac.permissions import RbacPermission
 
 User = get_user_model()
 
@@ -29,3 +31,11 @@ class UserProfileView(generics.RetrieveUpdateDestroyAPIView):
         tokens = OutstandingToken.objects.filter(user=instance)
         for token in tokens:
             BlacklistedToken.objects.get_or_create(token=token)
+
+
+class RoleViewSet(viewsets.ModelViewSet):
+    queryset = Role.objects.all()
+    serializer_class = RoleSerializer
+    permission_classes = (IsAuthenticated, RbacPermission)
+    resource_name = 'roles'
+
